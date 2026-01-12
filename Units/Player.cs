@@ -51,6 +51,8 @@ namespace GamePrototype.Units
             {
                 Health += healthPotion.HealthRestore;
             }
+
+            // TODO: добавить точильный камень. этот коммент просто обучение пользованием MR. перед пушем удалить
         }
 
         protected override uint CalculateAppliedDamage(uint damage)
