@@ -31,7 +31,7 @@ namespace GamePrototype.Units
         public void ApplyDamage(uint damage)
         {
             var damageApplied = CalculateAppliedDamage(damage);
-            if (_health < damageApplied || (_health - damageApplied) <= 0) 
+            if (_health <= damageApplied) // || (_health - damageApplied) <= 0 - избыточное условие
             {
                 _health = 0;
             }
@@ -46,7 +46,7 @@ namespace GamePrototype.Units
         protected abstract uint CalculateAppliedDamage(uint damage);
         
         protected virtual void DamageReceiveHandler() { }
-        
+
         public abstract uint GetUnitDamage();
 
         public abstract void HandleCombatComplete();
@@ -63,7 +63,7 @@ namespace GamePrototype.Units
         {
             for (int i = 0; i < unit.Inventory.Items.Count; i++) 
             {
-                if (!Inventory.TryAdd(unit.Inventory.Items[i])) 
+                if (!Inventory.TryAdd(unit.Inventory.Items[i])) // из инвентаря юнита (другого) items перекладывает себе игрок
                 {
                     //inventory is full
                     return;
