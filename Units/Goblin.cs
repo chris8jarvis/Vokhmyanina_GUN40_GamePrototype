@@ -11,6 +11,5 @@
         public override void HandleCombatComplete() => Health = MaxHealth;
 
         protected override uint CalculateAppliedDamage(uint damage) => damage;
-
     }
 }

@@ -7,7 +7,6 @@ namespace GamePrototype.Units
 {
     public sealed class Player : Unit
     {
-        // some comment for PR vision
         private readonly Dictionary<EquipSlot, EquipItem> _equipment = new();
 
         public Player(string name, uint health, uint maxHealth, uint baseDamage) : base(name, health, maxHealth, baseDamage)
@@ -52,8 +51,6 @@ namespace GamePrototype.Units
             {
                 Health += healthPotion.HealthRestore;
             }
-
-            // TODO: добавить точильный камень. этот коммент просто обучение пользованием PR. перед пушем удалить...
         }
 
         protected override uint CalculateAppliedDamage(uint damage)
