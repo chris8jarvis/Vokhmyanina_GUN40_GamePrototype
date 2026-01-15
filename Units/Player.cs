@@ -8,6 +8,7 @@ namespace GamePrototype.Units
     public sealed class Player : Unit
     {
         private const int DELTA_ARMOUR_REDUCE = 1;
+        private const int WEAPON_DURABILITY_REDUCE = 1;
         private readonly Dictionary<EquipSlot, EquipItem> _equipment = new();
 
         public Player(string name, uint health, uint maxHealth, uint baseDamage) : base(name, health, maxHealth, baseDamage)
@@ -18,6 +19,8 @@ namespace GamePrototype.Units
         {
             if (_equipment.TryGetValue(EquipSlot.Weapon, out var item) && item is Weapon weapon) 
             {
+                weapon.ReduceDurability(WEAPON_DURABILITY_REDUCE);
+                Console.WriteLine($"Weapon durability reduced. Weapon: {weapon.Durability}");
                 return BaseDamage + weapon.Damage;
             }
             return BaseDamage;
@@ -26,14 +29,16 @@ namespace GamePrototype.Units
         public override void HandleCombatComplete()
         {
             var items = Inventory.Items;
-            for (int i = 0; i < items.Count; i++) 
+            for (int i = items.Count - 1; i >= 0; i--)
             {
-                if (items[i] is EconomicItem economicItem) 
+                if (items[i] is EconomicItem economicItem)
                 {
-                    UseEconomicItem(economicItem);
-                    Inventory.TryRemove(items[i]);
+                    UseEconomicItem(economicItem); // переделать в TryUseEconomicItem. 
+                    Inventory.TryRemove(items[i]); // проверять условие если действительно было использовано, только тогда удалять из инвентаря
+                    // так же подозрение что тут ошибка, что золото например будет всегда удаляться
                 }
             }
+
         }
 
         public override void AddItemToInventory(Item item)
@@ -51,6 +56,16 @@ namespace GamePrototype.Units
             if (economicItem is HealthPotion healthPotion) 
             {
                 Health += healthPotion.HealthRestore;
+                Console.WriteLine($"Health potion used. Health: {Health}");
+            }
+
+            if (economicItem is Grindstone grindstone)
+            {
+                if (_equipment.TryGetValue(EquipSlot.Weapon, out var item) && item is Weapon weapon)
+                {
+                    weapon.Repair(grindstone.DurabilityRestore);
+                    Console.WriteLine($"Grindstone used. Weapon: {weapon.Durability}");
+                }
             }
         }
 

@@ -41,10 +41,11 @@ namespace GamePrototype.Game
                     Console.WriteLine("Game over!");
                     return;
                 }
-                DisplayRouteOptions(currentRoom);
-                while (true) 
+                while (true)
                 {
-                    if (Enum.TryParse<Direction>(Console.ReadLine(), out var direction) ) 
+                    DisplayRouteOptions(currentRoom);
+                    if (Enum.TryParse<Direction>(Console.ReadLine(), out var direction) &&
+                        Enum.IsDefined(typeof(Direction), direction)) 
                     {
                         currentRoom = currentRoom.Rooms[direction];
                         break;
