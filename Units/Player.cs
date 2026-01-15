@@ -53,6 +53,7 @@ namespace GamePrototype.Units
                 Health += healthPotion.HealthRestore;
             }
         }
+
         protected override void DamageReceiveHandler()
         {
             if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour)
