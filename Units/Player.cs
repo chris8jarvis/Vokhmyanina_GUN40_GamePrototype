@@ -7,6 +7,7 @@ namespace GamePrototype.Units
 {
     public sealed class Player : Unit
     {
+        private const int DELTA_ARMOUR_REDUCE = 1;
         private readonly Dictionary<EquipSlot, EquipItem> _equipment = new();
 
         public Player(string name, uint health, uint maxHealth, uint baseDamage) : base(name, health, maxHealth, baseDamage)
@@ -50,6 +51,15 @@ namespace GamePrototype.Units
             if (economicItem is HealthPotion healthPotion) 
             {
                 Health += healthPotion.HealthRestore;
+            }
+        }
+
+        protected override void DamageReceiveHandler()
+        {
+            if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour)
+            {
+                armour.ReduceDurability(DELTA_ARMOUR_REDUCE);
+                Console.WriteLine($"Armour reduced. Armour: {armour.Durability}");
             }
         }
 
