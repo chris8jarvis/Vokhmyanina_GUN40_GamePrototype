@@ -29,12 +29,13 @@ namespace GamePrototype.Units
         public override void HandleCombatComplete()
         {
             var items = Inventory.Items;
-            for (int i = items.Count-1; i >= 0; i--)
+            for (int i = items.Count - 1; i >= 0; i--)
             {
                 if (items[i] is EconomicItem economicItem)
                 {
                     UseEconomicItem(economicItem); // переделать в TryUseEconomicItem. 
                     Inventory.TryRemove(items[i]); // проверять условие если действительно было использовано, только тогда удалять из инвентаря
+                    // так же подозрение что тут ошибка, что золото например будет всегда удаляться
                 }
             }
 
@@ -64,7 +65,6 @@ namespace GamePrototype.Units
                 {
                     weapon.Repair(grindstone.DurabilityRestore);
                     Console.WriteLine($"Grindstone used. Weapon: {weapon.Durability}");
-
                 }
             }
         }
