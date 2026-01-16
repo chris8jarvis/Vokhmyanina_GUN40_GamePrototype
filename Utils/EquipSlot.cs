@@ -4,6 +4,7 @@
     {
         Weapon,
         Armour,
-        Helmet
+        Helmet,
+        RangeWeapon
     }
 }
