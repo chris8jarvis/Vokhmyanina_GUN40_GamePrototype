@@ -50,7 +50,7 @@ namespace GamePrototype.Units
 
         public override void AddItemToInventory(Item item)
         {
-            if (item is EquipItem newItem)// && _equipment.TryAdd(equipItem.Slot, equipItem))
+            if (item is EquipItem newItem)
             {
                 if (_equipment.TryGetValue(newItem.Slot, out var equippedItem)) // если слот занят
                 {
