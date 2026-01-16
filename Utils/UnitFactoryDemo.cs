@@ -9,7 +9,7 @@ namespace GamePrototype.Utils
         public static Unit CreatePlayer(string name)
         {
             var player = new Player(name, 30, 30, 6);
-      //      player.AddItemToInventory(new Weapon(10, 15, "Sword"));
+            player.AddItemToInventory(new Weapon(10, 15, "Sword"));
             player.AddItemToInventory(new RangeWeapon(5, 15, "Bow"));
             player.AddItemToInventory(new Armour(10, 15, "Simple armour"));
             player.AddItemToInventory(new Helmet(10, 15, "Dirty hat"));
