@@ -48,15 +48,6 @@ namespace GamePrototype.Units
 
         }
 
-        //public override void AddItemToInventoryOld(Item item)
-        //{
-        //    if (item is EquipItem equipItem && _equipment.TryAdd(equipItem.Slot, equipItem)) 
-        //    {
-        //        // Item was equipped
-        //        return;
-        //    }
-        //    base.AddItemToInventory(item);
-        //}
         public override void AddItemToInventory(Item item)
         {
             if (item is EquipItem newItem)// && _equipment.TryAdd(equipItem.Slot, equipItem))
