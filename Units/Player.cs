@@ -22,6 +22,12 @@ namespace GamePrototype.Units
                 weapon.ReduceDurability(WEAPON_DURABILITY_REDUCE);
                 Console.WriteLine($"Weapon durability reduced. Weapon: {weapon.Durability}");
                 return BaseDamage + weapon.Damage;
+            } 
+            else if (_equipment.TryGetValue(EquipSlot.RangeWeapon, out var item1) && item1 is RangeWeapon rangeWeapon)
+            {
+                rangeWeapon.ReduceDurability(WEAPON_DURABILITY_REDUCE);
+                Console.WriteLine($"Bow durability reduced. Bow: {rangeWeapon.Durability}");
+                return BaseDamage + rangeWeapon.Damage;
             }
             return BaseDamage;
         }
