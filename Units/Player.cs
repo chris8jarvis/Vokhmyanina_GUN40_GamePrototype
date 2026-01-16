@@ -1,6 +1,7 @@
 ﻿using GamePrototype.Items.EconomicItems;
 using GamePrototype.Items.EquipItems;
 using GamePrototype.Utils;
+using System.Collections.Generic;
 using System.Text;
 
 namespace GamePrototype.Units
@@ -49,11 +50,28 @@ namespace GamePrototype.Units
 
         public override void AddItemToInventory(Item item)
         {
-            if (item is EquipItem equipItem && _equipment.TryAdd(equipItem.Slot, equipItem)) 
+            if (item is EquipItem newItem)
             {
-                // Item was equipped
+                if (_equipment.TryGetValue(newItem.Slot, out var equippedItem)) // если слот занят
+                {
+                    Console.WriteLine($"Do you want to exchange {equippedItem.Name} to {newItem.Name}? [y/n]");
+                    if (Console.ReadLine() == "y")
+                    {
+                        _equipment.Remove(equippedItem.Slot);
+                        base.AddItemToInventory(equippedItem);
+
+                        _equipment.TryAdd(newItem.Slot, newItem); // мы тут не обрабатываем ошибку, хотя с другой стороны, что может пойти не так?
+                        Console.WriteLine($"{newItem.Slot} equipped with {newItem.Name}");
+                        return;
+                    }
+                    base.AddItemToInventory(newItem);
+                    return;
+                }
+                _equipment.TryAdd(newItem.Slot, newItem);
+                Console.WriteLine($"{newItem.Slot} equipped with {newItem.Name}");
                 return;
             }
+
             base.AddItemToInventory(item);
         }
 
