@@ -11,7 +11,7 @@ namespace GamePrototype.Utils
             var monsterRoom = new DungeonRoom("Monster", UnitFactoryDemo.CreateGoblinEnemy());
             var emptyRoom = new DungeonRoom("Empty");
             var lootRoom = new DungeonRoom("Loot1", new Gold());
-            var lootStoneRoom = new DungeonRoom("Loot1", new Grindstone("Stone"));
+            var lootStoneRoom = new DungeonRoom("Loot2", new Grindstone("Stone"));
             var finalRoom = new DungeonRoom("Final", new Grindstone("Stone1"));
 
             enter.TrySetDirection(Direction.Right, monsterRoom);
