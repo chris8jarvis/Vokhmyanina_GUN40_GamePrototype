@@ -71,19 +71,33 @@ namespace GamePrototype.Units
 
         protected override void DamageReceiveHandler()
         {
+            Console.WriteLine("DamageReceiveHandler is working");
             if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour)
             {
+                Console.WriteLine("Armour reduce is working");
                 armour.ReduceDurability(DELTA_ARMOUR_REDUCE);
                 Console.WriteLine($"Armour reduced. Armour: {armour.Durability}");
+            }
+            if (_equipment.TryGetValue(EquipSlot.Helmet, out var bufItemForHelmet) && bufItemForHelmet is Helmet helmet)
+            {
+                Console.WriteLine("Helmet reduce is working");
+                helmet.ReduceDurability(DELTA_ARMOUR_REDUCE);
+                Console.WriteLine($"Helmet reduced. Helmet: {helmet.Durability}");
             }
         }
 
         protected override uint CalculateAppliedDamage(uint damage)
         {
+            // TODO: сделать защиту от helmet
             if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour) 
             {
                 damage -= (uint)(damage * (armour.Defence / 100f));
             }
+            if (_equipment.TryGetValue(EquipSlot.Helmet, out var bufItemForHelmet) && bufItemForHelmet is Helmet helmet)
+            {
+                damage -= (uint)(damage * (helmet.Defence / 100f));
+            }
+
             return damage;
         }
 
