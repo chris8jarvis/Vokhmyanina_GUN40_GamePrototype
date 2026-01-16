@@ -88,7 +88,6 @@ namespace GamePrototype.Units
 
         protected override uint CalculateAppliedDamage(uint damage)
         {
-            // TODO: сделать защиту от helmet
             if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour) 
             {
                 damage -= (uint)(damage * (armour.Defence / 100f));
