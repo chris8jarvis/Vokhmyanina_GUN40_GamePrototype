@@ -158,6 +158,7 @@ namespace GamePrototype.Units
 
             base.AddItemToInventory(item);
         }
+
         private void EquipItemsExchange(EquipItem equippedItem, EquipItem newItem)
         {
             _equipment.Remove(equippedItem.Slot);
@@ -166,18 +167,16 @@ namespace GamePrototype.Units
             _equipment.TryAdd(newItem.Slot, newItem); // мы тут не обрабатываем ошибку, хотя с другой стороны, что может пойти не так?
             Console.WriteLine($"{newItem.Slot} equipped with {newItem.Name}");
         }
+
         protected override void DamageReceiveHandler()
         {
-            Console.WriteLine("DamageReceiveHandler is working");
             if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour)
             {
-                Console.WriteLine("Armour reduce is working");
                 armour.ReduceDurability(DELTA_ARMOUR_REDUCE);
                 Console.WriteLine($"Armour reduced. Armour: {armour.Durability}");
             }
             if (_equipment.TryGetValue(EquipSlot.Helmet, out var bufItemForHelmet) && bufItemForHelmet is Helmet helmet)
             {
-                Console.WriteLine("Helmet reduce is working");
                 helmet.ReduceDurability(DELTA_ARMOUR_REDUCE);
                 Console.WriteLine($"Helmet reduced. Helmet: {helmet.Durability}");
             }
