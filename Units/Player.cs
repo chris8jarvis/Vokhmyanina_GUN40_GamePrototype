@@ -35,17 +35,105 @@ namespace GamePrototype.Units
 
         public override void HandleCombatComplete()
         {
-            var items = Inventory.Items;
-            for (int i = items.Count - 1; i >= 0; i--)
+            // переделано в использование из инвентаря, чтобы бездумно не пылесосился инвентарь
+            // см. InventoryUsage()
+
+            //var items = Inventory.Items;
+            //for (int i = items.Count - 1; i >= 0; i--)
+            //{
+            //    if (items[i] is EconomicItem economicItem)
+            //    {
+            //        UseEconomicItem(economicItem); // переделать в TryUseEconomicItem. 
+            //        Inventory.TryRemove(items[i]); // проверять условие если действительно было использовано, только тогда удалять из инвентаря
+            //        // так же подозрение что тут ошибка, что золото например будет всегда удаляться
+            //    }
+            //}
+        }
+
+        public void UseEconomicItem(EconomicItem economicItem)
+        {
+            if (economicItem is HealthPotion healthPotion) 
             {
-                if (items[i] is EconomicItem economicItem)
-                {
-                    UseEconomicItem(economicItem); // переделать в TryUseEconomicItem. 
-                    Inventory.TryRemove(items[i]); // проверять условие если действительно было использовано, только тогда удалять из инвентаря
-                    // так же подозрение что тут ошибка, что золото например будет всегда удаляться
-                }
+                Heal(healthPotion.HealthRestore);
+                Console.WriteLine($"Health potion used. Health: {Health}");
             }
 
+            if (economicItem is Grindstone grindstone)
+            {
+                if (_equipment.Count > 0)
+                {
+                    UseGrindstone(grindstone.DurabilityRestore);
+                }
+            }
+        }
+
+        private void Heal(uint healthRestore)
+        {
+            if (Health + healthRestore > MaxHealth)
+            {
+                Health = MaxHealth;
+            }
+            else
+            {
+                Health += healthRestore;
+            }
+        }
+        
+        private string ShowEquipment()
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine("Equipment:");
+
+            int i = 0;
+            foreach (var slot in Enum.GetValues<EquipSlot>())
+            {
+                if (_equipment.TryGetValue(slot, out var item))
+                {
+                    builder.AppendLine($"{i}. [{slot}] {item.Name} - Durability: {item.Durability}/{item.MaxDurability}");
+                }
+                else
+                {
+                    builder.AppendLine($"{i}. [{slot}] - Empty");
+                }
+                i++;
+            }
+            return builder.ToString();
+        }
+
+        private void UseGrindstone(uint durabilityRestore)
+        {
+            var slots = Enum.GetValues<EquipSlot>();
+            while (true)
+            {
+                Console.WriteLine(ShowEquipment());
+                Console.WriteLine("Text number for item to fix with Grindstone or 'e' for exit");
+                string playerCommand = Console.ReadLine();
+                if (playerCommand == "e")
+                {
+                    break;
+                }
+                if (int.TryParse(playerCommand, out int index) &&
+                    index >= 0 && 
+                    index < slots.Length)
+                {
+                    EquipSlot selectedSlot = slots[index];
+
+                    if (_equipment.TryGetValue(selectedSlot, out var equipItem))
+                    {
+                        equipItem.Repair(durabilityRestore);
+                        Console.WriteLine($"{equipItem.Name} is repaired: {equipItem.Durability}/{equipItem.MaxDurability}");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Slot {selectedSlot} is empty!");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Wrong command");
+                }
+            }
         }
 
         public override void AddItemToInventory(Item item)
@@ -57,11 +145,7 @@ namespace GamePrototype.Units
                     Console.WriteLine($"Do you want to exchange {equippedItem.Name} to {newItem.Name}? [y/n]");
                     if (Console.ReadLine() == "y")
                     {
-                        _equipment.Remove(equippedItem.Slot);
-                        base.AddItemToInventory(equippedItem);
-
-                        _equipment.TryAdd(newItem.Slot, newItem); // мы тут не обрабатываем ошибку, хотя с другой стороны, что может пойти не так?
-                        Console.WriteLine($"{newItem.Slot} equipped with {newItem.Name}");
+                        EquipItemsExchange(equippedItem, newItem);
                         return;
                     }
                     base.AddItemToInventory(newItem);
@@ -74,25 +158,14 @@ namespace GamePrototype.Units
 
             base.AddItemToInventory(item);
         }
-
-        private void UseEconomicItem(EconomicItem economicItem)
+        private void EquipItemsExchange(EquipItem equippedItem, EquipItem newItem)
         {
-            if (economicItem is HealthPotion healthPotion) 
-            {
-                Health += healthPotion.HealthRestore;
-                Console.WriteLine($"Health potion used. Health: {Health}");
-            }
+            _equipment.Remove(equippedItem.Slot);
+            base.AddItemToInventory(equippedItem);
 
-            if (economicItem is Grindstone grindstone)
-            {
-                if (_equipment.TryGetValue(EquipSlot.Weapon, out var item) && item is Weapon weapon)
-                {
-                    weapon.Repair(grindstone.DurabilityRestore);
-                    Console.WriteLine($"Grindstone used. Weapon: {weapon.Durability}");
-                }
-            }
+            _equipment.TryAdd(newItem.Slot, newItem); // мы тут не обрабатываем ошибку, хотя с другой стороны, что может пойти не так?
+            Console.WriteLine($"{newItem.Slot} equipped with {newItem.Name}");
         }
-
         protected override void DamageReceiveHandler()
         {
             Console.WriteLine("DamageReceiveHandler is working");
@@ -136,6 +209,57 @@ namespace GamePrototype.Units
                 builder.AppendLine($"[{items[i].Name}] : {items[i].Amount}");
             }
             return builder.ToString();
+        }
+
+        public override string ShowInventory()
+        {
+            var items = Inventory.Items;
+            if (items.Count == 0)
+            {
+                return "Inventory is empty";
+            }
+
+            var builder = new StringBuilder();
+            builder.AppendLine("Inventory");
+            for (int i = 0; i < items.Count; i++)
+            {
+                builder.AppendLine($"{i} - {items[i].Name}");
+            }
+            return builder.ToString();
+        }
+
+        public override void InventoryUsage()
+        {
+            while (true)
+            {
+                Console.Write(ShowInventory());
+                Console.WriteLine("Text number for use or 'e' for exit inventory");
+                string playerCommand = Console.ReadLine();
+                if (playerCommand == "e")
+                {
+                    break;
+                }
+                else if (int.TryParse(playerCommand, out int index) &&
+                         index >= 0 &&
+                         index < Inventory.Items.Count)
+                {
+                    var item = Inventory.Items[index];
+                    if (item is EquipItem equipItem)
+                    {
+                        Inventory.TryRemove(equipItem);
+                        AddItemToInventory(equipItem);
+                    }
+                    else if (item is EconomicItem economicItem)
+                    {
+                        UseEconomicItem(economicItem);
+                        Inventory.TryRemove(economicItem);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Wrong command");
+                }
+            }
         }
     }
 }

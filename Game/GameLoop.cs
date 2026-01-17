@@ -1,5 +1,6 @@
 ﻿using GamePrototype.Combat;
 using GamePrototype.Dungeon;
+using GamePrototype.Items.EconomicItems;
 using GamePrototype.Units;
 using GamePrototype.Utils;
 
@@ -32,9 +33,9 @@ namespace GamePrototype.Game
         private void StartGameLoop()
         {
             var currentRoom = _dungeon;
-            
-            while (currentRoom.IsFinal == false) 
-            {
+
+            while (currentRoom.IsFinal == false)
+            { 
                 StartRoomEncounter(currentRoom, out var success);
                 if (!success) 
                 {
@@ -43,17 +44,22 @@ namespace GamePrototype.Game
                 }
                 while (true)
                 {
-                    DisplayRouteOptions(currentRoom);
-                    if (Enum.TryParse<Direction>(Console.ReadLine(), out var direction) &&
-                        Enum.IsDefined(typeof(Direction), direction)) 
+                    DisplayActionChoice();
+                    string playerCommand = Console.ReadLine();
+                    if (playerCommand == "1")
                     {
-                        currentRoom = currentRoom.Rooms[direction];
+                        _player.InventoryUsage();
+                    }
+                    else if (playerCommand == "2")
+                    {
+                        currentRoom = HandleMoveCommand(currentRoom);
                         break;
-                    }
-                    else 
+                    } 
+                    else
                     {
-                        Console.WriteLine("Wrong direction!");
+                        Console.WriteLine("Wrong command");
                     }
+                    
                 }
             }
             Console.WriteLine($"Congratulations, {_player.Name}");
@@ -96,7 +102,31 @@ namespace GamePrototype.Game
             }
         }
 
+        private void DisplayActionChoice()
+        {
+            Console.WriteLine("What do you want to do?");
+            Console.WriteLine("1 - inventory check, 2 - move");
+        }
+        private DungeonRoom HandleMoveCommand(DungeonRoom currentRoom)
+        {
+            while (true)
+            {
+                DisplayRouteOptions(currentRoom);
+                if (Enum.TryParse<Direction>(Console.ReadLine(), out var direction) &&
+                    Enum.IsDefined(typeof(Direction), direction) &&
+                    currentRoom.Rooms.TryGetValue(direction, out var nextRoom))
+                {
+                    return nextRoom;
+                }
+                else
+                {
+                    Console.WriteLine("Wrong direction!");
+                }
+            }
+        }
         
+        
+
         #endregion
     }
 }

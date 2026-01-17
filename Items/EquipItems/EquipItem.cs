@@ -8,6 +8,7 @@ namespace GamePrototype.Items.EquipItems
         private uint _durability;
         private uint _maxDurability;
         public uint Durability { get => _durability; protected set => _durability = value; }
+        public uint MaxDurability { get => _maxDurability; }
         public override bool Stackable => false;
 
         public abstract EquipSlot Slot { get; }
@@ -31,7 +32,7 @@ namespace GamePrototype.Items.EquipItems
         }
 
         public void Repair(uint delta) => 
-            _durability += _durability + delta > _maxDurability 
+            _durability = _durability + delta > _maxDurability 
             ? _maxDurability 
             : _durability + delta;
     }

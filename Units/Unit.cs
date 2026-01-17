@@ -51,6 +51,9 @@ namespace GamePrototype.Units
 
         public abstract void HandleCombatComplete();
 
+        public virtual string ShowInventory() => "";
+        public virtual void InventoryUsage() { }
+
         public virtual void AddItemToInventory(Item item) 
         {
             if (!Inventory.TryAdd(item)) 
