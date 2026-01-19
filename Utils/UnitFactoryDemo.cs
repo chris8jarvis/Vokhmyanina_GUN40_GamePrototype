@@ -16,7 +16,7 @@ namespace GamePrototype.Utils
             player.AddItemToInventory(new Helmet(10, 15, "Dirty hat"));
            // player.AddItemToInventory(new Helmet(55, 25, "Silver helmet"));
             player.AddItemToInventory(new HealthPotion("Potion"));
-            player.AddItemToInventory(new Grindstone("Grindstone")); //для теста нужно подобрать grindstone в промежуточной комнате
+            player.AddItemToInventory(new Grindstone("Grindstone")); //для теста нужно подобрать grindstone в промежуточной комнате            
             return player;
         }
 
