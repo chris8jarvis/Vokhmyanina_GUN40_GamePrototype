@@ -3,16 +3,18 @@ using GamePrototype.Items.EconomicItems;
 
 namespace GamePrototype.Utils
 {
-    public static class DungeonBuilder
+    //public static class DungeonBuilder
+    public class EasyLevelDungeon : DungeonFactory 
     {
-        public static DungeonRoom BuildDungeon()
+        //public static DungeonRoom BuildDungeon()
+        public override DungeonRoom BuildDungeon()
         {
-            var enter = new DungeonRoom("Enter");
-            var monsterRoom = new DungeonRoom("Monster", UnitFactoryDemo.CreateGoblinEnemy());
-            var emptyRoom = new DungeonRoom("Empty");
-            var lootRoom = new DungeonRoom("Loot1", new Gold());
-            var lootStoneRoom = new DungeonRoom("Loot2", new Grindstone("Stone"));
-            var finalRoom = new DungeonRoom("Final", new Grindstone("Stone1"));
+            var enter = CreateEmptyRoom("Enter");
+            var monsterRoom = CreateMonsterRoom("Monster", UnitFactoryDemo.CreateGoblinEnemy());
+            var emptyRoom = CreateEmptyRoom("Empty");
+            var lootRoom = CreateLootRoom("Loot1", new Gold());
+            var lootStoneRoom = CreateLootRoom("Loot2", new Grindstone("Stone"));
+            var finalRoom = CreateLootRoom("Final", new Grindstone("Stone1"));
 
             enter.TrySetDirection(Direction.Right, monsterRoom);
             enter.TrySetDirection(Direction.Left, emptyRoom);
