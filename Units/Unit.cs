@@ -1,4 +1,5 @@
 ﻿using GamePrototype.Items.EconomicItems;
+using GamePrototype.Items.EquipItems;
 
 namespace GamePrototype.Units
 {

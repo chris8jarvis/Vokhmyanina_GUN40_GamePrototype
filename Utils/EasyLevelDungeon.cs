@@ -4,7 +4,7 @@ using GamePrototype.Items.EconomicItems;
 namespace GamePrototype.Utils
 {
     //public static class DungeonBuilder
-    public class EasyLevelDungeon : DungeonFactory 
+    public class EasyLevelDungeon : DungeonBuilder //заменить на builder. не использовать слово factory у dungeon
     {
         //public static DungeonRoom BuildDungeon()
         public override DungeonRoom BuildDungeon()

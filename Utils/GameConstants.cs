@@ -6,5 +6,6 @@
         public static string HealthPotion = "Health Potion";
         public static string Grindstone = nameof(Grindstone);
         public static string Goblin = nameof(Goblin);
+        public static string Ork = nameof(Ork);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GamePrototype.Combat;
 using GamePrototype.Dungeon;
 using GamePrototype.Items.EconomicItems;
+using GamePrototype.Items.EquipItems;
 using GamePrototype.Units;
 using GamePrototype.Utils;
 
@@ -24,7 +25,11 @@ namespace GamePrototype.Game
         private void Initialize()
         {
             Console.WriteLine("Welcome, player!");
+            // while true - чтобы заставить ввести e или h иначе беконечный цикл с ответом Wrong difficulty
+                // if easy\hard -> build easy or build hard
             _dungeon = DungeonBuilder.BuildDungeon();
+            // закончился while
+
             Console.WriteLine("Enter your name");
             _player = UnitFactoryDemo.CreatePlayer(Console.ReadLine());
             Console.WriteLine($"Hello {_player.Name}");

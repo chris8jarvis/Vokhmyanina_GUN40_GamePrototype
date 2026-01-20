@@ -21,5 +21,6 @@ namespace GamePrototype.Utils
         }
 
         public static Unit CreateGoblinEnemy() => new Goblin(GameConstants.Goblin, 18, 18, 2);
+        public static Unit CreateOrkEnemy() => new Ork(GameConstants.Ork, 30, 25, 5);
     }
 }

@@ -5,7 +5,7 @@ using GamePrototype.Units;
 
 namespace GamePrototype.Utils
 {
-    public abstract class DungeonFactory
+    public abstract class DungeonBuilder
     {
         public abstract DungeonRoom BuildDungeon();
 
