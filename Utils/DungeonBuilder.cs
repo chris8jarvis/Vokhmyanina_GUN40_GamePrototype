@@ -1,31 +1,26 @@
-﻿using GamePrototype.Dungeon;
+﻿
+using GamePrototype.Dungeon;
 using GamePrototype.Items.EconomicItems;
+using GamePrototype.Units;
+using GamePrototype.Units.Factories;
 
 namespace GamePrototype.Utils
 {
-    public static class DungeonBuilder
+    public abstract class DungeonBuilder
     {
-        public static DungeonRoom BuildDungeon()
+        public abstract DungeonRoom BuildDungeon(UnitFactory unitFactory);
+
+        protected virtual DungeonRoom CreateEmptyRoom(string name)
         {
-            var enter = new DungeonRoom("Enter");
-            var monsterRoom = new DungeonRoom("Monster", UnitFactoryDemo.CreateGoblinEnemy());
-            var emptyRoom = new DungeonRoom("Empty");
-            var lootRoom = new DungeonRoom("Loot1", new Gold());
-            var lootStoneRoom = new DungeonRoom("Loot2", new Grindstone("Stone"));
-            var finalRoom = new DungeonRoom("Final", new Grindstone("Stone1"));
-
-            enter.TrySetDirection(Direction.Right, monsterRoom);
-            enter.TrySetDirection(Direction.Left, emptyRoom);
-
-            monsterRoom.TrySetDirection(Direction.Forward, lootRoom);
-            monsterRoom.TrySetDirection(Direction.Left, emptyRoom);
-
-            emptyRoom.TrySetDirection(Direction.Forward, lootStoneRoom);
-
-            lootRoom.TrySetDirection(Direction.Forward, finalRoom);
-            lootStoneRoom.TrySetDirection(Direction.Forward, finalRoom);
-
-            return enter;
+            return new DungeonRoom(name);
+        }
+        protected virtual DungeonRoom CreateMonsterRoom(string name, Unit enemy)
+        {
+            return new DungeonRoom(name, enemy);
+        }
+        protected virtual DungeonRoom CreateLootRoom(string name, Item item)
+        {
+            return new DungeonRoom(name, item);
         }
     }
 }
