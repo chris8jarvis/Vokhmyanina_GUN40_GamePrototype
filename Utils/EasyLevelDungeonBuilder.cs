@@ -1,16 +1,17 @@
 ﻿using GamePrototype.Dungeon;
 using GamePrototype.Items.EconomicItems;
+using GamePrototype.Units.Factories;
 
 namespace GamePrototype.Utils
 {
     //public static class DungeonBuilder
-    public class EasyLevelDungeon : DungeonBuilder //заменить на builder. не использовать слово factory у dungeon
+    public sealed class EasyLevelDungeonBuilder : DungeonBuilder
     {
         //public static DungeonRoom BuildDungeon()
-        public override DungeonRoom BuildDungeon()
+        public override DungeonRoom BuildDungeon(UnitFactory unitFactory)
         {
             var enter = CreateEmptyRoom("Enter");
-            var monsterRoom = CreateMonsterRoom("Monster", UnitFactoryDemo.CreateGoblinEnemy());
+            var monsterRoom = CreateMonsterRoom("Monster", unitFactory.CreateGoblinEnemy());
             var emptyRoom = CreateEmptyRoom("Empty");
             var lootRoom = CreateLootRoom("Loot1", new Gold());
             var lootStoneRoom = CreateLootRoom("Loot2", new Grindstone("Stone"));

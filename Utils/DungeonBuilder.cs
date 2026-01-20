@@ -2,12 +2,13 @@
 using GamePrototype.Dungeon;
 using GamePrototype.Items.EconomicItems;
 using GamePrototype.Units;
+using GamePrototype.Units.Factories;
 
 namespace GamePrototype.Utils
 {
     public abstract class DungeonBuilder
     {
-        public abstract DungeonRoom BuildDungeon();
+        public abstract DungeonRoom BuildDungeon(UnitFactory unitFactory);
 
         protected virtual DungeonRoom CreateEmptyRoom(string name)
         {

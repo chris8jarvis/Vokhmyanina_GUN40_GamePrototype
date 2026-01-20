@@ -3,6 +3,7 @@ using GamePrototype.Dungeon;
 using GamePrototype.Items.EconomicItems;
 using GamePrototype.Items.EquipItems;
 using GamePrototype.Units;
+using GamePrototype.Units.Factories;
 using GamePrototype.Utils;
 
 namespace GamePrototype.Game
@@ -25,13 +26,44 @@ namespace GamePrototype.Game
         private void Initialize()
         {
             Console.WriteLine("Welcome, player!");
-            // while true - чтобы заставить ввести e или h иначе беконечный цикл с ответом Wrong difficulty
-                // if easy\hard -> build easy or build hard
-            _dungeon = DungeonBuilder.BuildDungeon();
-            // закончился while
+            bool isHardLevel = false;
+            while (true)
+            {
+                Console.WriteLine("Write 'e' - for easy level, 'h' - for hard level. [e/h]: ");
+                string userChoice = Console.ReadLine();
+                if (userChoice == "e")
+                {
+                    isHardLevel = false;
+                    break;
+                }
+                else if (userChoice == "h")
+                {
+                    isHardLevel = true;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Wrong direction");
+                }
+            }
+
+            UnitFactory unitFactory;
+            DungeonBuilder dungeonBuilder;
+            if (isHardLevel)
+            {
+                unitFactory = new HardUnitFactory();
+                dungeonBuilder = new HardLevelDungeonBuilder();
+            }
+            else
+            {
+                unitFactory = new EasyUnitFactory();
+                dungeonBuilder = new EasyLevelDungeonBuilder();
+            }
+
+            _dungeon = dungeonBuilder.BuildDungeon(unitFactory);
 
             Console.WriteLine("Enter your name");
-            _player = UnitFactoryDemo.CreatePlayer(Console.ReadLine());
+            _player = unitFactory.CreatePlayer(Console.ReadLine());
             Console.WriteLine($"Hello {_player.Name}");
         }
 
@@ -103,7 +135,7 @@ namespace GamePrototype.Game
             Console.WriteLine("Where to go?");
             foreach (var room in currentRoom.Rooms)
             {
-                Console.Write($"{room.Key} - {(int) room.Key}\t");
+                Console.Write($"{room.Key}: {(int) room.Key}\t");
             }
         }
 
