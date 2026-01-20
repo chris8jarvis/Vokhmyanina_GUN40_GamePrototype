@@ -27,6 +27,6 @@ namespace GamePrototype.Units.Factories
             return player;
         }
         public override Unit CreateGoblinEnemy() => new Goblin(GameConstants.Goblin, 18, 18, 2);
-        public override Unit CreateOrkEnemy() => new Ork(GameConstants.Ork, 30, 25, 5);
+        public override Unit CreateOrkEnemy() => new Ork(GameConstants.Ork, 50, 25, 5);
     }
 }
