@@ -28,9 +28,6 @@ namespace GamePrototype.Utils
             monsterOrkRoom.TrySetDirection(Direction.Forward, finalRoom);
             lootStoneRoom.TrySetDirection(Direction.Forward, finalRoom);
 
-            //monsterGoblinRoom.TrySetDirection(Direction.Forward, finalRoom);
-            //monsterOrkRoom.TrySetDirection(Direction.Forward, finalRoom);
-
             return enter;
         }
     }
