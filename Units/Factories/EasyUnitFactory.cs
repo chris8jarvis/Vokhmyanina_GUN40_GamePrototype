@@ -19,7 +19,6 @@ namespace GamePrototype.Units.Factories
             player.AddItemToInventory(new RangeWeapon(5, 15, "Bow"));
             player.AddItemToInventory(new Armour(10, 15, "Simple armour"));
             player.AddItemToInventory(new Helmet(10, 15, "Dirty hat"));
-            // player.AddItemToInventory(new Helmet(55, 25, "Silver helmet"));
             player.AddItemToInventory(new HealthPotion("Potion"));
             player.AddItemToInventory(new Grindstone("Grindstone"));           
             return player;
